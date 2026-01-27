@@ -6,8 +6,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-API_BASE = os.getenv('api-base')  # Change this to your FastAPI backend URL
-# API_BASE = st.secrets["API_BASE"]
+# API_BASE = os.getenv('api-base')  # Change this to your FastAPI backend URL
+API_BASE = st.secrets["API_BASE"]
 
 st.set_page_config(page_title="Auth App", page_icon="🔒")
 
