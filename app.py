@@ -6,8 +6,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# API_BASE = os.getenv('api-base')  # Change this to your FastAPI backend URL
-API_BASE = st.secrets["API_BASE"]
+API_BASE = os.getenv('api-base')  # Change this to your FastAPI backend URL
+# API_BASE = st.secrets["API_BASE"]
 
 st.set_page_config(page_title="Auth App", page_icon="🔒")
 
@@ -48,9 +48,16 @@ def login_page():
             response = requests.post(f"{API_BASE}/login", json={"username": username, "password": password})
             if response.status_code == 200:
                 st.session_state["username"] = username
+                response_data = response.json()
+                user_info = response_data.get('data', {})
+                st.session_state["user_id"] = user_info.get('user_id')
                 go_to("dashboard")
             else:
-                st.error(response.json().get("detail", "Login failed"))
+                try:
+                    error_data = response.json()
+                    st.error(error_data.get("detail", "Login failed"))
+                except requests.exceptions.JSONDecodeError:
+                    st.error("Login failed: Invalid response from server")
         else:
             st.warning("Please enter your username and password.")
 

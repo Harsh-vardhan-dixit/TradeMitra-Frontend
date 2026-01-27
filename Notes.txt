@@ -1,3 +1,4 @@
 IMPORTANT LINKS
 
 1. Microservice Architecture : Reference Link (https://github.com/PacktPublishing/Building-Python-Microservices-with-FastAPI)
+2. Python Path : C:\Users\shubh\.pyenv\pyenv-win\versions\3.10.0\python.exe

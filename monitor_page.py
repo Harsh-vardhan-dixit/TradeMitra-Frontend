@@ -5,8 +5,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# API_BASE = os.getenv('api-base')
-API_BASE = st.secrets["API_BASE"]
+API_BASE = os.getenv('api-base')
+# API_BASE = st.secrets["API_BASE"]
 
 def start_monitoring():
 
@@ -67,13 +67,37 @@ def start_monitoring():
 
     st.write("---")
 
+    # -------- Max Trades Per Day Option --------
+    st.subheader("Daily Trade Limit (Optional)")
+    
+    enable_trade_limit = st.toggle(
+        "Enable Maximum Trades Per Day",
+        value=False,
+        help="Limit the number of trades per day. If disabled, no limit will be applied."
+    )
+    
+    max_trades_per_day = None
+    if enable_trade_limit:
+        max_trades_per_day = st.number_input(
+            "Maximum Trades Per Day",
+            min_value=1,
+            max_value=50,
+            value=7,
+            step=1,
+            help="Maximum number of trades allowed per day. Kill switch will activate when this limit is reached."
+        )
+
+    st.write("---")
+
     # -------- Send API CALL --------
     if st.button("🚀 Start Monitoring"):
         payload = {
+            "user_id":st.session_state.user_id,
             "token":st.session_state.token,
             "client_id":st.session_state.client_id,
             "initial_loss_threshold": initial_loss_threshold,
-            "thresholds": st.session_state.thresholds
+            "thresholds": st.session_state.thresholds,
+            "max_trades_per_day": max_trades_per_day
         }
 
         response = requests.post(f"{API_BASE}/start_manual", json=payload)
